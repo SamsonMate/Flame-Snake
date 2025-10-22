@@ -1,0 +1,95 @@
+[gd_scene load_steps=10 format=3 uid="uid://d203hw8j1pe6g"]
+
+[ext_resource type="Script" path="res://SnakeHead.gd" id="1_d2y2a"]
+[ext_resource type="Script" path="res://Spawner.gd" id="1_ldac7"]
+[ext_resource type="Script" path="res://SnakeBody.gd" id="2_jpx2k"]
+[ext_resource type="PackedScene" uid="uid://cvp2xd8yesf86" path="res://Burnables/grass.tscn" id="2_rd05c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x6l3k"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_e3pg5"]
+size = Vector2(11, 11)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l2v8t"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_f3b5u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qclu"]
+bg_color = Color(0.478431, 0.258824, 0.0392157, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.835294, 0.776471, 0.376471, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.160784)
+shadow_size = 9
+shadow_offset = Vector2(-5, 3)
+
+[node name="Main" type="Node"]
+
+[node name="Spawner" type="Node2D" parent="."]
+script = ExtResource("1_ldac7")
+enemy_scene = ExtResource("2_rd05c")
+player_path = NodePath("../Player")
+
+[node name="Data" type="Node" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+z_index = 1
+position = Vector2(605, 273)
+script = ExtResource("1_d2y2a")
+
+[node name="HeadCollision" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_x6l3k")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/HeadCollision"]
+texture = SubResource("PlaceholderTexture2D_e3pg5")
+
+[node name="SnakeBody" type="Node2D" parent="Player"]
+script = ExtResource("2_jpx2k")
+
+[node name="SnakeNode" type="Node2D" parent="Player/SnakeBody"]
+
+[node name="Area2D" type="Area2D" parent="Player/SnakeBody/SnakeNode"]
+
+[node name="CollisionShape2d" type="CollisionShape2D" parent="Player/SnakeBody/SnakeNode/Area2D"]
+shape = SubResource("CircleShape2D_l2v8t")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/SnakeBody/SnakeNode/Area2D"]
+texture = SubResource("PlaceholderTexture2D_f3b5u")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+editor_draw_screen = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 218.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4qclu")
+
+[node name="Label" type="Label" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+text = "Abasiuobsdubfsdfsfsdfsd
+"
+vertical_alignment = 1
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/ParallaxBackground"]
+show_behind_parent = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.6, 0, 1)
+
+[connection signal="trail_updated" from="Player" to="Player/SnakeBody" method="_on_head_trail_updated"]

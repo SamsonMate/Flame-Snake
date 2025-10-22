@@ -1,0 +1,108 @@
+[gd_scene load_steps=11 format=3 uid="uid://ctffb2ofj8wgh"]
+
+[ext_resource type="Script" path="res://grassland.gd" id="1_c171k"]
+[ext_resource type="PackedScene" uid="uid://cbfubv1lmac3f" path="res://Scenes/snake.tscn" id="2_c71ed"]
+[ext_resource type="Texture2D" uid="uid://c51wawydrbovm" path="res://Textures/Ash.png" id="2_mrc0w"]
+[ext_resource type="Script" path="res://Scripts/Spawner.gd" id="3_lupqc"]
+
+[sub_resource type="Gradient" id="Gradient_ghw8t"]
+offsets = PackedFloat32Array(0.012987, 0.461039, 0.798701)
+colors = PackedColorArray(0.360784, 0.25098, 0.2, 1, 0, 0, 0, 1, 0, 0.160784, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_aasx1"]
+noise_type = 2
+frequency = 0.2833
+fractal_type = 0
+cellular_distance_function = 3
+cellular_return_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3uuvx"]
+width = 1024
+height = 1024
+seamless = true
+seamless_blend_skirt = 1.0
+color_ramp = SubResource("Gradient_ghw8t")
+noise = SubResource("FastNoiseLite_aasx1")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tkdm5"]
+content_margin_right = 10.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_5awlu"]
+font_size = 32
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 12
+shadow_color = Color(0, 0, 0, 0.501961)
+
+[sub_resource type="LabelSettings" id="LabelSettings_viihp"]
+font_size = 32
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Grassland" type="Node2D"]
+script = ExtResource("1_c171k")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(5000, 5000)
+
+[node name="Background" type="TextureRect" parent="ParallaxBackground/ParallaxLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 5000.0
+offset_bottom = 5000.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_3uuvx")
+stretch_mode = 1
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TimeCounter" type="PanelContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -203.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tkdm5")
+
+[node name="Label" type="Label" parent="UI/TimeCounter"]
+layout_mode = 2
+text = "10
+"
+label_settings = SubResource("LabelSettings_5awlu")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="AshesCounter" type="HBoxContainer" parent="UI"]
+texture_filter = 1
+offset_left = 25.0
+offset_top = 25.0
+offset_right = 200.0
+offset_bottom = 70.0
+
+[node name="TextureRect" type="TextureRect" parent="UI/AshesCounter"]
+layout_mode = 2
+texture = ExtResource("2_mrc0w")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="UI/AshesCounter"]
+layout_mode = 2
+text = "Ashes: 0"
+label_settings = SubResource("LabelSettings_viihp")
+
+[node name="Snake" parent="." instance=ExtResource("2_c71ed")]
+
+[node name="Spawner" type="Node2D" parent="."]
+script = ExtResource("3_lupqc")
+snake_path = NodePath("../Snake")
+starting_amount = 20
+
+[node name="SpawnTimer" type="Timer" parent="Spawner"]
+wait_time = 2.5
+autostart = true
+
+[connection signal="timeout" from="Spawner/SpawnTimer" to="Spawner" method="spawn_tick"]

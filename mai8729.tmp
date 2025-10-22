@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://d203hw8j1pe6g"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_gd8hr"]
+[ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_ldac7"]
+[ext_resource type="PackedScene" uid="uid://03gh4ux3jcd8" path="res://Scenes/skill_tree.tscn" id="2_8jbk3"]
+[ext_resource type="PackedScene" uid="uid://cbfubv1lmac3f" path="res://Scenes/snake.tscn" id="2_ieavd"]
+[ext_resource type="Script" path="res://Grassland.gd" id="3_1o0pl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qclu"]
+content_margin_left = 10.0
+bg_color = Color(0.341176, 0.341176, 0.341176, 1)
+skew = Vector2(0.1, 0)
+border_width_left = 4
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.160784)
+shadow_size = 9
+shadow_offset = Vector2(-5, 3)
+anti_aliasing = false
+
+[node name="Main" type="Node"]
+script = ExtResource("1_gd8hr")
+
+[node name="SkillTree" parent="." instance=ExtResource("2_8jbk3")]
+
+[node name="Grassland" type="Node2D" parent="."]
+script = ExtResource("3_1o0pl")
+
+[node name="Snake" parent="Grassland" instance=ExtResource("2_ieavd")]
+
+[node name="Spawner" type="Node2D" parent="Grassland"]
+script = ExtResource("1_ldac7")
+snake_path = NodePath("../Snake")
+starting_amount = 20
+
+[node name="SpawnTimer" type="Timer" parent="Grassland/Spawner"]
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Grassland"]
+
+[node name="AshesCounter" type="PanelContainer" parent="Grassland/CanvasLayer"]
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 218.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4qclu")
+
+[node name="Label" type="Label" parent="Grassland/CanvasLayer/AshesCounter"]
+layout_mode = 2
+text = "Ashes: 0"
+vertical_alignment = 1
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Grassland/CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="Grassland/CanvasLayer/ParallaxBackground"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.560784, 0, 1)
+
+[connection signal="timeout" from="Grassland/Spawner/SpawnTimer" to="Grassland/Spawner" method="spawn_enemy"]

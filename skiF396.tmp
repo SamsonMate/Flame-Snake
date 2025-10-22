@@ -1,0 +1,166 @@
+[gd_scene load_steps=6 format=3 uid="uid://03gh4ux3jcd8"]
+
+[ext_resource type="Script" path="res://Scripts/skill_tree.gd" id="1_500mb"]
+[ext_resource type="PackedScene" uid="uid://cjuugtcmiram3" path="res://Scenes/skill_button.tscn" id="1_h3nu7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yiacv"]
+content_margin_right = 10.0
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uodil"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.784314)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjy21"]
+content_margin_left = 10.0
+bg_color = Color(0.341176, 0.341176, 0.341176, 1)
+skew = Vector2(0.1, 0)
+border_width_left = 4
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.160784)
+shadow_size = 9
+shadow_offset = Vector2(-5, 3)
+anti_aliasing = false
+
+[node name="SkillTree" type="Control" groups=["SkillTree"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_500mb")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="ChangeScreensButton" type="Button" parent="UI"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yiacv")
+text = "Go back to playing >>>"
+
+[node name="DescriptionBox" type="PanelContainer" parent="UI"]
+custom_minimum_size = Vector2(0, 100)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uodil")
+
+[node name="DescriptionLabel" type="Label" parent="UI/DescriptionBox"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Helper hleper
+"
+
+[node name="AshesCounter" type="PanelContainer" parent="UI"]
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 218.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fjy21")
+
+[node name="Label" type="Label" parent="UI/AshesCounter"]
+layout_mode = 2
+text = "Ashes: 0"
+vertical_alignment = 1
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Unlock Growth" parent="." instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = 594.0
+offset_top = 479.0
+offset_right = 669.0
+offset_bottom = 554.0
+disabled = false
+SkillName = "Dash"
+
+[node name="SkillButton2" parent="Unlock Growth" instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = -106.0
+offset_top = -108.0
+offset_right = -31.0
+offset_bottom = -33.0
+SkillName = "Fireball"
+MaxLevel = 2
+
+[node name="SkillButton5" parent="Unlock Growth/SkillButton2" instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = -114.0
+offset_top = -103.0
+offset_right = -39.0
+offset_bottom = -28.0
+MaxLevel = 5
+
+[node name="SkillButton3" parent="Unlock Growth" instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = 94.0
+offset_top = -109.0
+offset_right = 169.0
+offset_bottom = -34.0
+MaxLevel = 4
+
+[node name="SkillButton4" parent="Unlock Growth/SkillButton3" instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = -99.0
+offset_top = -122.0
+offset_right = -24.0
+offset_bottom = -47.0
+MaxLevel = 2
+
+[node name="SkillButton6" parent="Unlock Growth/SkillButton3" instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = 108.0
+offset_top = -110.0
+offset_right = 183.0
+offset_bottom = -35.0
+
+[node name="SkillButton7" parent="Unlock Growth/SkillButton3/SkillButton6" instance=ExtResource("1_h3nu7")]
+layout_mode = 0
+offset_left = 40.0
+offset_top = -128.0
+offset_right = 115.0
+offset_bottom = -53.0
+MaxLevel = 5
+
+[connection signal="pressed" from="UI/ChangeScreensButton" to="." method="exit_screen"]

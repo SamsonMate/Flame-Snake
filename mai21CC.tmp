@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://d203hw8j1pe6g"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_gd8hr"]
+[ext_resource type="PackedScene" uid="uid://03gh4ux3jcd8" path="res://skill_tree.tscn" id="2_8jbk3"]
+[ext_resource type="PackedScene" uid="uid://dhghjv602qjli" path="res://main_menu.tscn" id="2_wp33q"]
+[ext_resource type="PackedScene" uid="uid://ctffb2ofj8wgh" path="res://grassland.tscn" id="4_ktdgj"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_gd8hr")
+
+[node name="Camera" type="Camera2D" parent="."]
+
+[node name="MainMenu" parent="." instance=ExtResource("2_wp33q")]
+
+[node name="SkillTree" parent="." instance=ExtResource("2_8jbk3")]
+visible = false
+
+[node name="Grassland" parent="." instance=ExtResource("4_ktdgj")]

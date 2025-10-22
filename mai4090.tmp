@@ -1,0 +1,82 @@
+[gd_scene load_steps=9 format=3 uid="uid://d203hw8j1pe6g"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_gd8hr"]
+[ext_resource type="Script" path="res://Spawner.gd" id="1_ldac7"]
+[ext_resource type="Texture2D" uid="uid://wdsebj8eyhtn" path="res://Textures/SnakeHead.png" id="5_4cgxb"]
+[ext_resource type="Script" path="res://AshesCounter.gd" id="6_ix502"]
+[ext_resource type="Script" path="res://Snake.gd" id="8_awwd2"]
+[ext_resource type="PackedScene" uid="uid://vx8yvy5o6af1" path="res://segment.tscn" id="9_jknbh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qclu"]
+bg_color = Color(0.341176, 0.341176, 0.341176, 1)
+border_width_left = 4
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.160784)
+shadow_size = 9
+shadow_offset = Vector2(-5, 3)
+anti_aliasing = false
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u4kcn"]
+radius = 9.0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_gd8hr")
+
+[node name="Spawner" type="Node2D" parent="."]
+script = ExtResource("1_ldac7")
+snake_path = NodePath("../Snake")
+starting_amount = 20
+
+[node name="SpawnTimer" type="Timer" parent="Spawner"]
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="AshesCounter" type="PanelContainer" parent="CanvasLayer"]
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 218.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4qclu")
+script = ExtResource("6_ix502")
+
+[node name="Label" type="Label" parent="CanvasLayer/AshesCounter"]
+layout_mode = 2
+text = "0"
+vertical_alignment = 1
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/ParallaxBackground"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.560784, 0, 1)
+
+[node name="Snake" type="Node2D" parent="."]
+script = ExtResource("8_awwd2")
+segment_scene = ExtResource("9_jknbh")
+metadata/Damage = 5
+
+[node name="SnakeHead" type="Sprite2D" parent="Snake"]
+texture = ExtResource("5_4cgxb")
+
+[node name="Camera2D" type="Camera2D" parent="Snake"]
+position_smoothing_enabled = true
+editor_draw_screen = false
+
+[node name="Area2D" type="Area2D" parent="Snake"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Snake/Area2D"]
+shape = SubResource("CircleShape2D_u4kcn")
+
+[connection signal="timeout" from="Spawner/SpawnTimer" to="Spawner" method="spawn_enemy"]
